@@ -1,6 +1,7 @@
 CFLAGS = -I. -I../../ -Wall -Wextra
 
 BUILDDIR ?= build
+OUTDIR ?= .
 XPLAT_SOURCES_REL := $(shell find ../../ '(' -name '*.c' -or -name '*.cpp' ')' -not -name '*android*' -not -name '*ios*')
 XPLAT_SOURCES := $(XPLAT_SOURCES_REL:../../%=%)
 XPLAT_DIRS = $(sort $(dir $(XPLAT_SOURCES) ) )
@@ -11,7 +12,7 @@ OBJECTS = $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 OBJDEPS=$(OBJECTS:%.o=%.d)
 -include $(OBJDEPS)
 
-TARGET = xplat.html
+TARGET = $(OUTDIR)/xplat.html
 
 ifeq ($(OS),Windows_NT)
     OPEN := start
