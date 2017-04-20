@@ -1,9 +1,10 @@
-CFLAGS = -std=c++11 -I. -I../../ -Wall -Wextra -D__WEB__
+CFLAGS = -std=c++11 -I. -I../../src -I../../../engine/src -I../../../vendor -Wall -Wextra -D__WEB__
 
 BUILDDIR ?= build
 OUTDIR ?= output
-XPLAT_SOURCES_REL := $(shell find ../../ '(' -name '*.c' -or -name '*.cpp' ')' -not -name '*android*' -not -name '*ios*')
-XPLAT_SOURCES := $(XPLAT_SOURCES_REL:../../%=%)
+LIBDIRS := ../../../game/src ../../../engine/src
+XPLAT_SOURCES_REL := $(shell find $(LIBDIRS) '(' -name '*.c' -or -name '*.cpp' ')' -not -name '*android*' -not -name '*ios*')
+XPLAT_SOURCES := $(XPLAT_SOURCES_REL:../../../%=%)
 XPLAT_DIRS = $(sort $(dir $(XPLAT_SOURCES) ) )
 OUTPUT_DIRS = $(addprefix $(BUILDDIR)/,$(XPLAT_DIRS))
 
@@ -38,13 +39,13 @@ $(TARGET): $(OBJECTS)
 	@$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(OBJECTS)
 	@echo done!
 
-$(BUILDDIR)/%.o : ../../%.cpp
-	@echo -n [CC $(patsubst ../../%,%,$<)]:" " 
+$(BUILDDIR)/%.o : ../../../%.cpp
+	@echo -n [CC $(patsubst ../../../%,%,$<)]:" " 
 	@$(CC) $(CFLAGS) -MD -MP $< -o $@
 	@echo done!
 
-$(BUILDDIR)/%.o : ../../%.c
-	@echo -n [CC $(patsubst ../../%,%,$<)]:" " 
+$(BUILDDIR)/%.o : ../../../%.c
+	@echo -n [CC $(patsubst ../../../%,%,$<)]:" " 
 	@$(CC) $(CFLAGS) -MD -MP $< -o $@
 	@echo done!
 

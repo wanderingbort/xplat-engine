@@ -1,4 +1,4 @@
-#include "engine/os/app.h"
+#include "os/app.h"
 #include <GL/glfw.h>
 
 static void on_gl_ready() {
