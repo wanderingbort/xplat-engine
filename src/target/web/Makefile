@@ -1,16 +1,15 @@
-CFLAGS = -I. -I../../ -Wall -Wextra
+CFLAGS = -std=c++11 -I. -I../../ -Wall -Wextra -D__WEB__
 
 BUILDDIR ?= build
-OUTDIR ?= .
+OUTDIR ?= output
 XPLAT_SOURCES_REL := $(shell find ../../ '(' -name '*.c' -or -name '*.cpp' ')' -not -name '*android*' -not -name '*ios*')
 XPLAT_SOURCES := $(XPLAT_SOURCES_REL:../../%=%)
 XPLAT_DIRS = $(sort $(dir $(XPLAT_SOURCES) ) )
 OUTPUT_DIRS = $(addprefix $(BUILDDIR)/,$(XPLAT_DIRS))
 
-SOURCES = target/web/main.c $(XPLAT_SOURCES)
-OBJECTS = $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
+SOURCES = $(XPLAT_SOURCES)
+OBJECTS = $(addprefix $(BUILDDIR)/,$(addsuffix .o,$(basename $(SOURCES))))
 OBJDEPS=$(OBJECTS:%.o=%.d)
--include $(OBJDEPS)
 
 TARGET = $(OUTDIR)/xplat.html
 
@@ -27,12 +26,12 @@ else
 endif
 
 # Targets start here.
+all: $(TARGET)
+
 run: all
 	@echo -n [OPEN $(TARGET)]:" " 
 	@$(OPEN) $(TARGET)
 	@echo done!
-
-all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@echo -n [PACK $@]:" " 
@@ -40,7 +39,7 @@ $(TARGET): $(OBJECTS)
 	@echo done!
 
 $(BUILDDIR)/%.o : ../../%.cpp
-	@echo [CC $(patsubst ../../%,%,$<)]:" " 
+	@echo -n [CC $(patsubst ../../%,%,$<)]:" " 
 	@$(CC) $(CFLAGS) -MD -MP $< -o $@
 	@echo done!
 
@@ -49,9 +48,14 @@ $(BUILDDIR)/%.o : ../../%.c
 	@$(CC) $(CFLAGS) -MD -MP $< -o $@
 	@echo done!
 
-$(OBJECTS): | $(OUTPUT_DIRS)
+$(OBJECTS): | $(OUTPUT_DIRS) $(OUTDIR)
 
 $(OUTPUT_DIRS):
+	@echo -n [MKDIR $@]:" " 
+	@mkdir -p $@
+	@echo done!
+
+$(OUTDIR):
 	@echo -n [MKDIR $@]:" " 
 	@mkdir -p $@
 	@echo done!
@@ -63,3 +67,4 @@ clean:
 
 # list targets that do not create files (but not all makes understand .PHONY)
 .PHONY:	all clean run
+-include $(OBJDEPS)

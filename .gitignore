@@ -1,0 +1,3 @@
+.vscode
+src/target/*/build
+src/target/*/output
