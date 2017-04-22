@@ -1,15 +1,15 @@
-CFLAGS = -std=c++11 -I. -I../../src -I../../../engine/src -I../../../vendor -Wall -Wextra -D__WEB__
+MAKEFILE_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+CFLAGS = -std=c++11 -I$(MAKEFILE_DIR) -Igame/src -Iengine/src -Ivendor -Wall -Wextra -D__WEB__
 
-BUILDDIR ?= build
-OUTDIR ?= output
-LIBDIRS := ../../../game/src ../../../engine/src
-XPLAT_SOURCES_REL := $(shell find $(LIBDIRS) '(' -name '*.c' -or -name '*.cpp' ')' -not -name '*android*' -not -name '*ios*')
-XPLAT_SOURCES := $(XPLAT_SOURCES_REL:../../../%=%)
+BUILDDIR ?= $(MAKEFILE_DIR)/build
+OUTDIR ?= $(MAKEFILE_DIR)/output
+LIBDIRS := game/src engine/src
+XPLAT_SOURCES := $(shell find $(LIBDIRS) '(' -name '*.c' -or -name '*.cpp' ')' -not -name '*android*' -not -name '*ios*')
 XPLAT_DIRS = $(sort $(dir $(XPLAT_SOURCES) ) )
-OUTPUT_DIRS = $(addprefix $(BUILDDIR)/,$(XPLAT_DIRS))
 
 SOURCES = $(XPLAT_SOURCES)
 OBJECTS = $(addprefix $(BUILDDIR)/,$(addsuffix .o,$(basename $(SOURCES))))
+OBJECTDIRS = $(addprefix $(BUILDDIR)/,$(XPLAT_DIRS))
 OBJDEPS=$(OBJECTS:%.o=%.d)
 
 TARGET = $(OUTDIR)/xplat.html
@@ -39,19 +39,19 @@ $(TARGET): $(OBJECTS)
 	@$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $(OBJECTS)
 	@echo done!
 
-$(BUILDDIR)/%.o : ../../../%.cpp
-	@echo -n [CC $(patsubst ../../../%,%,$<)]:" " 
+$(BUILDDIR)/%.o : %.cpp
+	@echo -n [CC $<]:" " 
 	@$(CC) $(CFLAGS) -MD -MP $< -o $@
 	@echo done!
 
-$(BUILDDIR)/%.o : ../../../%.c
-	@echo -n [CC $(patsubst ../../../%,%,$<)]:" " 
+$(BUILDDIR)/%.o : %.c
+	@echo -n [CC $<]:" " 
 	@$(CC) $(CFLAGS) -MD -MP $< -o $@
 	@echo done!
 
-$(OBJECTS): | $(OUTPUT_DIRS) $(OUTDIR)
+$(OBJECTS): | $(OBJECTDIRS) $(OUTDIR)
 
-$(OUTPUT_DIRS):
+$(OBJECTDIRS):
 	@echo -n [MKDIR $@]:" " 
 	@mkdir -p $@
 	@echo done!
@@ -64,6 +64,7 @@ $(OUTDIR):
 clean:
 	@echo -n [CLEAN]:" " 
 	@$(RM) $(TARGET) $(TARGET:%.html=%.js) $(OBJECTS) $(OBJDEPS)
+	@$(RM) -rf $(BUILDDIR)
 	@echo done!
 
 # list targets that do not create files (but not all makes understand .PHONY)

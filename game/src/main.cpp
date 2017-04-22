@@ -5,14 +5,12 @@ static void on_gl_ready() {
 
 }
 
-static void on_dimension_change(int width, int height) {
-    glViewport(0, 0, width, height);
+static void on_dimension_change(int , int ) {
+    
 }
 
 static void do_frame() {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
 }
 
 int main()

@@ -1,7 +1,7 @@
 #if !defined(__APP_H__)
 #define __APP_H__ 
 
-#include "display.h"
+#include "gl/display.h"
 
 class app_params {
 public:
@@ -15,7 +15,10 @@ public:
     char const *title;
     int framerate_cap;
     on_frame_cb on_frame;
+
+    // other major systems
     display_params display;
+    input_params input;
 };
 
 

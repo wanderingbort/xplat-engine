@@ -1,37 +1,31 @@
 #include "app.h"
+#include "gl/display.h"
+#include "util/platform.h"
 
-#if defined(__WEB__)
-    #include "app_web.h"
-#else
-    #error("Unknown Platform");
-#endif
+#include platform_header(app)
 
 const app_params *Application_params = nullptr;
 
 bool app_init(const app_params *params) {
     Application_params = params;
-    #if defined(__WEB__)
-        return app_init_web();
-    #else
-        #error("Unknown Platform");
-    #endif
 
-    params->display.on_gl_ready();
-	params->display.on_dimension_change(params->width, params->height);
+    bool res = true;
+    res = res && platform_call(app_init);
+    res = res && display_init();
+
+    return res;
+}
+
+static void do_frame() {
+    display_clear();
+    Application_params->on_frame();
+    display_swap();
 }
 
 void app_run() {
-    #if defined(__WEB__)
-        app_run_web();
-    #else
-        #error("Unknown Platform");
-    #endif
+    platform_call(app_run, do_frame);
 }
 
 void app_shutdown() {
-    #if defined(__WEB__)
-        app_shutdown_web();
-    #else
-        #error("Unknown Platform");
-    #endif
+    platform_call(app_shutdown);
 }

@@ -15,5 +15,9 @@ public:
     dimension_cb on_dimension_change;
 };
 
+bool display_init();
+void display_clear();
+void display_swap();
+void display_shutdown();
 
 #endif //!defined(__DISPLAY_H__)
