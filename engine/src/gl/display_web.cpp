@@ -6,18 +6,19 @@
 #include "os/app_internal.h"
 
 bool display_init_web() {
+    auto &params = Application_params->display;
     if (glfwInit() != GL_TRUE) {
 		printf("glfwInit() failed\n");
 		return false;
 	}
 
-	if (glfwOpenWindow(Application_params->width, Application_params->height, 8, 8, 8, 8, 16, 0, GLFW_WINDOW) != GL_TRUE) {
+	if (glfwOpenWindow(params.width, params.height, 8, 8, 8, 8, 16, 0, GLFW_WINDOW) != GL_TRUE) {
 		printf("glfwOpenWindow() failed\n");
     	return false;
     }
 
     // need to set up some sort callback for when the canvas changes dimensions
-    glViewport(0, 0, Application_params->width, Application_params->height);
+    glViewport(0, 0, params.width, params.height);
 
     return true;
 }

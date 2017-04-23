@@ -2,6 +2,7 @@
 #define __APP_H__ 
 
 #include "gl/display.h"
+#include "input/input.h"
 
 class app_params {
 public:
@@ -10,11 +11,9 @@ public:
 
     typedef void (*on_frame_cb)();
 
-    int width;
-    int height;
     char const *title;
-    int framerate_cap;
     on_frame_cb on_frame;
+    int framerate_cap;
 
     // other major systems
     display_params display;

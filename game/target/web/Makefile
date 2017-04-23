@@ -1,5 +1,5 @@
 MAKEFILE_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-CFLAGS = -std=c++11 -I$(MAKEFILE_DIR) -Igame/src -Iengine/src -Ivendor -Wall -Wextra -D__WEB__
+CFLAGS = -std=c++11 -g4 -I$(MAKEFILE_DIR) -Igame/src -Iengine/src -Ivendor -Wall -Wextra -D__WEB__
 
 BUILDDIR ?= $(MAKEFILE_DIR)/build
 OUTDIR ?= $(MAKEFILE_DIR)/output
