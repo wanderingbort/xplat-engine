@@ -1,13 +1,11 @@
 #include "app.h"
 
-const app::params *Application_params = nullptr;
-
 bool app::init_internal(app::params const *params) {
-    Application_params = params;
     m_params = params;
 
     bool res = true;
     res = res && HOOKS(app)::bind(this);
+    res = res && m_time.init(&params->time);
     res = res && m_display.init(&params->display);
     res = res && m_input.init(&params->input);
 
@@ -16,6 +14,7 @@ bool app::init_internal(app::params const *params) {
 
 static app *running_app = nullptr;
 void do_frame_internal() {
+    running_app->m_time.tick_frame();
     running_app->m_input.poll();
     running_app->m_display.clear();
     running_app->m_params->on_frame();
