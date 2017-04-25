@@ -9,17 +9,21 @@ static void do_frame() {
 
 int main()
 {
-    app_params params;
+    app::params params;
     params.display.width = 640;
     params.display.height = 480;
     params.framerate_cap = 0;
     params.on_frame = do_frame;
 
-    if (app_init(&params)) {
-        app_run();
+    printf("INITIALIZING\n");
+    app *the_app = app::init(&params);
+    if (the_app != nullptr) {
+        printf("STARTING MAIN LOOP\n");
+        the_app->run();
     }
 
-    app_shutdown();
+    printf("SHUTTING DOWN\n");
+    the_app->shutdown();
 
 	return 0;
 }
