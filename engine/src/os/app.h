@@ -4,25 +4,47 @@
 #include "gl/display.h"
 #include "input/input.h"
 
-class app_params {
+#include "util/platform.h"
+#include platform_header(app)
+
+
+typedef void (*do_frame_callback)();
+
+DECLARE_HOOKS_START(app)
+    DECLARE_REQUIRED_HOOK_VOID(run, do_frame_callback);
+    DECLARE_OPTIONAL_HOOK_VOID(shutdown);
+DECLARE_HOOKS_END();
+
+class app : HOOKS(app) {
 public:
-    app_params() 
-    {}
+    class params {
+    public:
+        params() 
+        {}
 
-    typedef void (*on_frame_cb)();
+        typedef void (*on_frame_cb)();
 
-    char const *title;
-    on_frame_cb on_frame;
-    int framerate_cap;
+        char const *title;
+        on_frame_cb on_frame;
+        int framerate_cap;
 
-    // other major systems
-    display_params display;
-    input_params input;
+        // other major systems
+        display::params display;
+        input::params input;
+    };
+
+    static app *init(params const *params);
+    void run();
+    void shutdown();
+
+
+    params const *m_params;
+    display m_display;
+    input m_input;
+
+private:
+    app(){};
+    bool init_internal(params const *params);
 };
-
-
-bool app_init(const app_params *params);
-void app_run();
-void app_shutdown();
 
 #endif //!defined(__APP_H__)

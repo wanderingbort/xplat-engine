@@ -1,18 +1,32 @@
 #if !defined(__DISPLAY_H__)
 #define __DISPLAY_H__
 
-class display_params {
-public:
-    display_params()
-    {}
+#include "util/platform.h"
+#include platform_header(display)
 
-    int width;
-    int height;
+DECLARE_HOOKS_START(display)
+protected:
+    DECLARE_OPTIONAL_HOOK(bool, true, init);
+public:
+    DECLARE_REQUIRED_HOOK_VOID(clear);
+    DECLARE_REQUIRED_HOOK_VOID(swap);
+    DECLARE_OPTIONAL_HOOK_VOID(shutdown);
+DECLARE_HOOKS_END();
+
+class display : public HOOKS(display) {
+public:
+    class params {
+    public:
+        params() 
+        {}
+
+        int width;
+        int height;
+    };
+
+    bool init(params const *params);
+    params const *m_params;
 };
 
-bool display_init();
-void display_clear();
-void display_swap();
-void display_shutdown();
 
 #endif //!defined(__DISPLAY_H__)

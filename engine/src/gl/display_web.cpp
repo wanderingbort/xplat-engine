@@ -3,36 +3,41 @@
 #include <GL/glfw.h>
 
 #include "display.h"
-#include "os/app_internal.h"
+#include "display_web.h"
 
-bool display_init_web() {
-    auto &params = Application_params->display;
+bool display_web::bind(display *common_display) {
+    m_width = common_display->m_params->width;
+    m_height = common_display->m_params->width;
+    return true;
+}
+
+bool display_web::init() {
     if (glfwInit() != GL_TRUE) {
 		printf("glfwInit() failed\n");
 		return false;
 	}
 
-	if (glfwOpenWindow(params.width, params.height, 8, 8, 8, 8, 16, 0, GLFW_WINDOW) != GL_TRUE) {
+	if (glfwOpenWindow(m_width, m_height, 8, 8, 8, 8, 16, 0, GLFW_WINDOW) != GL_TRUE) {
 		printf("glfwOpenWindow() failed\n");
     	return false;
     }
 
     // need to set up some sort callback for when the canvas changes dimensions
-    glViewport(0, 0, params.width, params.height);
+    glViewport(0, 0, m_width, m_height);
 
     return true;
 }
 
-void display_clear_web() {
+void display_web::clear() {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void display_swap_web() {
+void display_web::swap() {
     glfwSwapBuffers();
 }
 
-void display_shutdown_web() {
+void display_web::shutdown() {
     glfwTerminate();
 }

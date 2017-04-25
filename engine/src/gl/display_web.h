@@ -1,11 +1,17 @@
 #if !defined(__DISPLAY_WEB_H__)
 #define __DISPLAY_WEB_H__
 
-#include "display.h"
+class display;
+class display_web {
+public:
+    bool bind(display *common_display);
+    bool init();
+    void clear();
+    void swap();
+    void shutdown();
 
-bool display_init_web();
-void display_clear_web();
-void display_swap_web();
-void display_shutdown_web();
+    int m_width;
+    int m_height;
+};
 
 #endif //!defined(__DISPLAY_WEB_H__)
