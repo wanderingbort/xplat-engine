@@ -14,14 +14,23 @@ An opinionated cross-platform 3D game engine for web, ios* and android* in C/C++
 ### WEB platform
 To build the web platform:
 ```
-./build_web.sh
+./build_web.sh <path to game>
 ```
 
-optionally you can specify `OUTDIR` on your environment to place the final files in a specific path.
+optionally you can specify `OUTDIR=` on command line to place the final files in a specific path:
+```
+./build_web.sh <path to game> OUTDIR=<path to output directory>
+```
 
 To clean up your working directory:
 ```
-./build_web.sh clean
+./build_web.sh <path to game> clean
+```
+
+for example, to build the hello_world example:
+```
+./build_web.sh examples/hello_world
+./xdg-open examples/hello_world/output/xplat.html
 ```
 
 ## Other notes
