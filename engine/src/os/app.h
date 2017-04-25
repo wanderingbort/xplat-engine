@@ -1,6 +1,7 @@
 #if !defined(__APP_H__)
 #define __APP_H__ 
 
+#include "time.h"
 #include "gl/display.h"
 #include "input/input.h"
 
@@ -29,6 +30,7 @@ public:
         int framerate_cap;
 
         // other major systems
+        time::params time;
         display::params display;
         input::params input;
     };
@@ -39,6 +41,7 @@ public:
 
 
     params const *m_params;
+    time m_time;
     display m_display;
     input m_input;
 
