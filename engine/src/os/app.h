@@ -29,7 +29,7 @@ public:
         int framerate_cap;
 
         // other major systems
-        display_params display;
+        display::params display;
         input_params input;
     };
 
@@ -39,6 +39,7 @@ public:
 
 
     params const *m_params;
+    display m_display;
 
 private:
     app(){};

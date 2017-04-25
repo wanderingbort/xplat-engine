@@ -10,7 +10,7 @@ bool app::init_internal(app::params const *params) {
 
     bool res = true;
     res = res && HOOKS(app)::bind(this);
-    res = res && display_init();
+    res = res && m_display.init(&params->display);
     res = res && input_init();
 
     return res;
@@ -19,9 +19,9 @@ bool app::init_internal(app::params const *params) {
 static app *running_app = nullptr;
 void do_frame_internal() {
     input_poll();
-    display_clear();
+    running_app->m_display.clear();
     running_app->m_params->on_frame();
-    display_swap();
+    running_app->m_display.swap();
 }
 
 void app::run() {
@@ -32,7 +32,7 @@ void app::run() {
 
 void app::shutdown() {
     input_shutdown();
-    display_shutdown();
+    m_display.shutdown();
     HOOKS(app)::shutdown();
 }
 
