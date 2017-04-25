@@ -4,7 +4,10 @@
 #include <stdio.h>
 #include <wchar.h>
 
+app *the_app = nullptr;
+
 static void do_frame() {
+    
 }
 
 int main()
@@ -16,7 +19,7 @@ int main()
     params.on_frame = do_frame;
 
     printf("INITIALIZING\n");
-    app *the_app = app::init(&params);
+    the_app = app::init(&params);
     if (the_app != nullptr) {
         printf("STARTING MAIN LOOP\n");
         the_app->run();

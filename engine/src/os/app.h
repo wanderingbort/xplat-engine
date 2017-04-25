@@ -30,7 +30,7 @@ public:
 
         // other major systems
         display::params display;
-        input_params input;
+        input::params input;
     };
 
     static app *init(params const *params);
@@ -40,6 +40,7 @@ public:
 
     params const *m_params;
     display m_display;
+    input m_input;
 
 private:
     app(){};
